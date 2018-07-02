@@ -12,6 +12,8 @@ const reset = document.querySelector("#reset")
 reset.addEventListener("click", () => {
     selectedNum = ""
     render(0)
+    disableButtons()
+    pointBtn.classList.remove("disable")
 })
 
 let selectedNum = ""
@@ -21,18 +23,19 @@ numbers.forEach((number) => {
         if (!selectedNum === "" && !calculated) {
             const currentNum = number.textContent
             selectedNum += currentNum
-            pointBtn.classList.remove("disable")
             calculated = true
             render(selectedNum)
         } else if (calculated === true) {
             selectedNum = number.textContent
             pointBtn.classList.remove("disable")
+            minusBtn.classList.remove("disable")
             render(selectedNum)
         } else {
             selectedNum += `${number.textContent}`
             render(selectedNum)
         }
-        enableButtons()
+            minusBtn.classList.remove("disable")
+            enableButtons()
     })
 })
 
@@ -40,20 +43,24 @@ addBtn.addEventListener("click", () => {
     selectedNum += "+"
     calculated = false
     pointBtn.classList.remove("disable")
+    minusBtn.classList.remove("disable")
+    disableButtons()
     render(selectedNum)
 })
 
 minusBtn.addEventListener("click", () => {
     selectedNum += "-"
+    minusBtn.classList.add("disable")
     calculated = false
     pointBtn.classList.remove("disable")
     render(selectedNum)
-
+    disableButtons()
 })
 
 multiplyBtn.addEventListener("click", () => {
     selectedNum += "*"
     calculated = false
+    minusBtn.classList.remove("disable")
     pointBtn.classList.remove("disable")
     render(selectedNum)
     disableButtons()
@@ -62,6 +69,7 @@ multiplyBtn.addEventListener("click", () => {
 divideBtn.addEventListener("click", () => {
     selectedNum += "/"
     calculated = false
+    minusBtn.classList.remove("disable")
     pointBtn.classList.remove("disable")
     render(selectedNum)
     disableButtons()
@@ -74,20 +82,28 @@ pointBtn.addEventListener("click", () => {
         selectedNum += "."
     }
     calculated = false
+    minusBtn.classList.remove("disable")
     pointBtn.classList.add("disable")
     render(selectedNum)
+    enableButtons()
 })
 
 let calculated = false
 
 equalsBtn.addEventListener("click", () => {
-    if (!selectedNum.includes(".")) {
-        pointBtn.classList.remove("disable")
+    try {
+        if (!selectedNum.includes(".")) {
+            minusBtn.classList.remove("disable")
+            pointBtn.classList.remove("disable")
+            }
+            selectedNum = eval(selectedNum)
+            calculated = true
+        
+            render(selectedNum)
+    } catch {
+        display.textContent = "ERROR"
     }
-    selectedNum = eval(selectedNum)
-    calculated = true
-
-    render(selectedNum)
+    
 
 })
 
@@ -96,13 +112,15 @@ const render = (num) => {
 }
 
 const enableButtons = () => {
-    divideBtn.removeAttribute("disabled");
-    multiplyBtn.removeAttribute("disabled");
+    addBtn.classList.remove("disable")
+    divideBtn.classList.remove("disable")
+    multiplyBtn.classList.remove("disable")
 }
 
 const disableButtons = () => {
-    divideBtn.setAttribute("disabled", "true");
-    multiplyBtn.setAttribute("disabled", "true");
+    addBtn.classList.add("disable")
+    divideBtn.classList.add("disable")
+    multiplyBtn.classList.add("disable")
 }
 
 

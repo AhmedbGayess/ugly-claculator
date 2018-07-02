@@ -52,7 +52,7 @@ h1 {
     text-align: center;
 }
 
-.btn:hover {
+.btn:hover, #point:hover, #reset:hover {
     background: rgb(155, 156, 161);
 }
 
